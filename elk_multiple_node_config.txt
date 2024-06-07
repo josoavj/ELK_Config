@@ -137,3 +137,9 @@
 ## Securisation de la connexion de kibana avec le serveur
 - Run elasticsearch-certutil csr -name kibana-server
 - The  run: elasticsearch-certutil cert --pem -ca /usr/share/elasticsearch/elastic-stack-ca.p12  -name kibana-server
+- Copier le fichier généré kibana-server.crt vers /etc/kibana/certs
+- De même pour kibana-server.key
+- Lier ces fichiers dans yml:
+         --> server.ssl.enabled: true
+         --> server.ssl.certificate: /etc/kibana/certs/kibana-server.crt
+         --> server.ssl.key: /etc/kibana/certs/kibana-server.key
