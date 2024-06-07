@@ -1,0 +1,129 @@
+# CONFIGURATION POUR UN MULTISERVEUR POUR ELK
+
+### Présentation
+- Installation et configuration dans de multiples machines: deux au max
+- Un pour elasticsearch et l'autre pour kibana et ses plugins
+- Installer via tar archive de linux
+- elasticsearch V 8.x: La sécurité est activée par défaut
+ 
+### Installation globale pour ELK (+ Filebeat)
+- Installer suivant votre configuration mais il est recommandé d'utiliser l'archive pour linux
+- if (installation == linux){
+  lier_au_path(ELK_PATH);
+} else {
+  go_to(configuration);
+}
+
+- Lier au path: 
+  -> Créer un fichier .extension_nom_terminal: .extension_bash or .extension.fish
+  -> nano .extension_nom_terminal
+  -> Pour fish: 
+          --> set -gx NOMPATH0 /path/to/bin
+          --> set -gx PATH $PATH $NOMPATH0
+          --> -gx: Pour une configuration globale
+  -> Pour bash:
+          --> export NOMPATH0=/path/to/bin
+          --> export PATH=$PATH:$NOMPATH0
+  -> Recommandé: au cas ou il y a au moins deux terminal, veuillez configurer les deux
+  -> Ensuite: source .extension_nom_terminal
+
+#### Pour le serveur elasticsearch
+- Run: elasticsearch [Pour une configuration basique]
+- Run with systemd:
+     -> sudo systemctl enable elasticearch.service
+     -> sudo systemctm start elasticsearch.service
+
+- Run:  elasticsearch-reset-password -i -u elastic
+     -> -i: interactive
+     -> -u: Username 
+- Ou procéder par: elasticsearch-setup-password interactive
+  [Au cas ou la sécurité par défaut est defaillant ou n'est pas activée]
+
+- Ensuite: sudo systemctl status elasticsearch [Vérifier si elasticsearch est fonctionnel]
+- Après: curl --cacert /etc/elasticsearch/certs/http_ca.crt -u elastic https://localhost:9200
+- Ce dernier est fait pour vérifier si elasticsearch est fonctionnel sur votre serveur
+
+## Changer la configuration pour elasticsearch
+- GoTo /etc/elasticsearch/elasticsearch.yml:
+  -> Faire une copie de votre fichier avant tout elasticsearch.yml.backup 
+  -> Changer les configurations suivantes:
+     - cluster.name: mon-application
+     - node.name: node-1
+     - network.host: 172.27.28.15
+     - http.port: 9200
+
+## Problème de démarrage du service elasticsearch
+- Erreur de démarrage du elasticsearch.service
+- GoTo: /usr/lib/systemd/system/
+- Run: nano elasticsearch.service
+- Si les informations suivantes ne correspondent pas à votre environnement, veuillez les changer:
+    -> User=username
+    -> Groupe=group
+
+### Pour kibana dans un autre serveur
+- Installer kibana
+- Vérifier l'intégrité de tous les fichiers dans les dossiers suivants:
+  - /usr/share/kibana/  
+  - /etc/kibana/
+  - /var/lib/kibana
+- Créer un token pour kibana: elasticsearch-create-enrollement-token -s kibana
+- Run: kibana-setup
+- Run: sudo systemctl daemon-reload
+- Run: sudo systemctl enable kibana
+- Run: sudo systemctl start kibana
+- Same as elasticsearch: 
+  - goTo: /etc/kibana/kibana.yml
+  - Do: cp kibana.yml kibana.yml.backup for the backup file
+  - Then nano kibana.yml
+- On the kibana.yml: 
+  - server.port: 5601
+  - server.host: "kibana_IP"
+  - elasticsearch.hosts: ["https://localhost:9200"]
+  - elasticsearch.username: "kibana_system"
+  - elasticsearch.password: "ur_passwd" 
+  - elasticsearh.ssl.certificateAuthorities: ["/etc/kibana/certs/http_ca.crt"] (A copier venant de /etc/elasticsearch/certs)
+  - server.publicBaseUrl: "http://kibana_ip:5601"
+
+#### Copie vers un autre serveur ssh
+ - mkdir /etc/kibana/certs
+ - Do: scp /etc/elasticsearch/certs/http_ca.crt sfi@ip:/etc/kibana/certs
+- Ensuite: elasticsearch-reset-password -i -u kibana_system [Definition du mot de passe kibana]
+- Then: sudo systemctl restart kibana.service
+
+## Ajout automatique d'un nouveau node elasticsearch vers un cluster existant
+- ./elasticsearch-create-enrollment-token -s node
+- Copier le token generé
+- Executer la commande suivant dans le nouveau serveur node elasticsearch:
+  -> 
+## Génerer un certificat pem pour votre cluster elasticsearch
+- Run ./bin/elasticsearch-certutil ca --pem
+- Cela vous donnera un fichier .zip 
+- Extraire avec unzip
+- Run: cd /votre/dossier/ca
+- Ensuite: keytool -importcert -trustcacerts -noprompt -keystore elastic-stack-ca.p12 \ -storepass <password>  -alias new-ca -file ca.crt  
+- Vérifier la liste de certificat avec: keytool -keystore config/elastic-stack-ca.p12 -list
+
+## Génerer un nouveau certificat pour chaque node 
+- Run: ./bin/elasticsearch-certutil cert --ca-cert ca/ca.crt --ca-key ca/ca.key
+- Ensuite pour un certificat pour chaque node: elasticsearch-certutil http
+- Suivre les instructions
+- Pour génerer des nouveaux certificats pour toutes vos nodes:
+  -> Instructions:
+       --> CSR: N[Non]
+       --> CA existant : Y [Yes]
+       --> Path du CA [.../ca.crt]
+       --> Path du CA's key [.../ca.key]
+       --> Entrer la valeur d'expiration de votre certificat
+       --> Génerer un certificat par node: Y [Yes]
+       --> Répartition de chaque configuration:
+               --> Chaque node possède son propre clé privée
+               --> Un hostname spécifique
+               --> Une adresse IP spécifique
+        --> Après avoir généré vos certificats, veuillez configurer un mot d passe pour votre keystore
+        --> Vous obtenez un fichier elasticsearch-ssl-http.zip
+        --> Extraire votre fichier
+        --> Structure basique pour chaque dossier:
+                --> node_name
+                       |-- README.txt
+                       |-- http.p12
+                       |-- sample-elasticseacrh.yml
