@@ -126,9 +126,14 @@
                --> Une adresse IP spécifique
         --> Après avoir généré vos certificats, veuillez configurer un mot d passe pour votre keystore
         --> Vous obtenez un fichier elasticsearch-ssl-http.zip
-        --> Extraire votre fichier
-        --> Structure basique pour chaque dossier:
+        --> Extraire votre fichier: elle doit contenir deux dossiers: "elasticsearch" et "kibana"
+        --> Dans kibana se trouve le fichier elasticsearch-ca.pem qui vas être utilisé pour la configuration vers kibana
+        --> Configuration de kibana [kibana.yml]: elasticsearch.ssl.certificateAuthorities: KBN_PATH_CONF/elasticsearch-ca.pem
+        --> Structure basique pour chaque dossier dans elasticsearch en fonction des noms de vos nodes:
                 --> node_name
                        |-- README.txt
                        |-- http.p12
                        |-- sample-elasticsearch.yml
+## Securisation de la connexion de kibana avec le serveur
+- Run elasticsearch-certutil csr -name kibana-server
+- The  run: elasticsearch-certutil cert --pem -ca /usr/share/elasticsearch/elastic-stack-ca.p12  -name kibana-server
