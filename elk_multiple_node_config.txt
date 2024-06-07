@@ -116,8 +116,8 @@
   -> Instructions:
        --> CSR: N[Non]
        --> CA existant : Y [Yes]
-       --> Path du CA [.../ca.crt]
-       --> Path du CA's key [.../ca.key]
+       --> Path du CA [.../elastic-stack-ca.p12]
+       --> Entrer le mot de passe du CA
        --> Entrer la valeur d'expiration de votre certificat
        --> Génerer un certificat par node: Y [Yes]
        --> Répartition de chaque configuration:
