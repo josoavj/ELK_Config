@@ -30,7 +30,7 @@
 #### Pour le serveur elasticsearch
 - Run: elasticsearch [Pour une configuration basique]
 - Run with systemd:
-     -> sudo systemctl enable elasticearch.service
+     -> sudo systemctl enable elasticsearch.service
      -> sudo systemctm start elasticsearch.service
 
 - Run:  elasticsearch-reset-password -i -u elastic
@@ -52,13 +52,18 @@
      - network.host: 172.27.28.15
      - http.port: 9200
 
-## Problème de démarrage du service elasticsearch
+## Issue: Problème de démarrage du service elasticsearch
 - Erreur de démarrage du elasticsearch.service
 - GoTo: /usr/lib/systemd/system/
 - Run: nano elasticsearch.service
 - Si les informations suivantes ne correspondent pas à votre environnement, veuillez les changer:
     -> User=username
     -> Groupe=group
+- Run: sudo systemctl daemon-reload
+- Run: sudo systemctl status elasticsearch
+- Run:! sudo systemctl enable elasticsearch
+- Run: sudo systemctl start elasticsearch
+
 
 ### Pour kibana dans un autre serveur
 - Installer kibana
@@ -126,4 +131,4 @@
                 --> node_name
                        |-- README.txt
                        |-- http.p12
-                       |-- sample-elasticseacrh.yml
+                       |-- sample-elasticsearch.yml
