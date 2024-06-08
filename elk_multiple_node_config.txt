@@ -159,3 +159,11 @@
          --> server.ssl.enabled: true
          --> server.ssl.certificate: /etc/kibana/certs/kibana-server.crt
          --> server.ssl.key: /etc/kibana/certs/kibana-server.key
+
+## Activer le monitoring avec metricbeat
+- Aller dans kibana Management>STack-management
+- Si Metricbeat non installé, veuillez l'installer (Via le lien fourni dans kibana)
+- Changer le mots de passe pour beats_system dans kibana ou elasticsearch-reset-password -i -u beats_system
+- Run:  metricbeat modules list
+- En cas d'erreur: metricbeat modules enable elasticsearch-xpack
+
