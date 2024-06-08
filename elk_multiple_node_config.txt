@@ -50,6 +50,7 @@
      - cluster.name: mon-application
      - node.name: node-1
      - network.host: 172.27.28.15
+     ## Avoir son adresse IP: Sur Linux, run: ifconfig
      - http.port: 9200
 
 ## Issue: Problème de démarrage du service elasticsearch
@@ -101,15 +102,27 @@
 - Executer la commande suivant dans le nouveau serveur node elasticsearch:
   -> 
 ## Génerer un certificat pem pour votre cluster elasticsearch
-- Run ./bin/elasticsearch-certutil ca --pem
-- Cela vous donnera un fichier .zip 
-- Extraire avec unzip
-- Run: cd /votre/dossier/ca
-- Ensuite: keytool -importcert -trustcacerts -noprompt -keystore elastic-stack-ca.p12 \ -storepass <password>  -alias new-ca -file ca.crt  
+- Run ./bin/elasticsearch-certutil ca
+- Cela vous donnera le fichier:  elastic-stack-ca.p12 [Sécurisé avec un mot de passe]
+- Ensuite run: elasticsearch-certutil cert --ca elastic-stack-ca.p12 [Pour génerer un clé et un certificat privé pour votre node (Single node)]
+- Cela vous donnera un  fichier: elastic-certificates.p12
+- Ajouter les configurations suivantes dans elasticsearch.yml:
+   --> xpack.security.transport.ssl.enabled: true
+   --> xpack.security.transport.ssl.client_authentication: required
+   --> xpack.security.transport.ssl.verification_mode: certificate
+    --> xpack.security.transport.ssl.keystore.path: /path/to/certs/elastic-certificates.p12
+    --> xpack.security.transport.ssl.truststore.path: /path/to/certs/elastic-certificates.p12
+
+- Then run:
+   -->   elasticsearch-keystore add xpack.security.transport.ssl.keystore.secure_password
+   -->   elasticsearch-keystore add xpack.security.transport.ssl.truststore.secure_password
+
+--> Remarque: copier le fichier elastic-certificates.p12 et suivre les mêmes instructions dans chaque node de votre cluster elasticsearch
+
+- Ensuite: keytool -importcert -trustcacerts -noprompt -keystore elastic-stack-ca.p12 \ -storepass <password>  -alias new-ca -file ca.crt
 - Vérifier la liste de certificat avec: keytool -keystore config/elastic-stack-ca.p12 -list
 
-## Génerer un nouveau certificat pour chaque node 
-- Run: ./bin/elasticsearch-certutil cert --ca-cert ca/ca.crt --ca-key ca/ca.key
+## Génerer un certificat pour securiser la connexion entre chaque node
 - Ensuite pour un certificat pour chaque node: elasticsearch-certutil http
 - Suivre les instructions
 - Pour génerer des nouveaux certificats pour toutes vos nodes:
@@ -134,8 +147,11 @@
                        |-- README.txt
                        |-- http.p12
                        |-- sample-elasticsearch.yml
+                --> Copier http.p12 dans certs/
+                --> Run :  elasticsearch-keystore add xpack.security.http.ssl.keystore.secure_password
+
 ## Securisation de la connexion de kibana avec le serveur
-- Run elasticsearch-certutil csr -name kibana-server
+- Run elasticsearch-certutil csr -name kibana-server [Inutile, passer à l'etape suivante]
 - The  run: elasticsearch-certutil cert --pem -ca /usr/share/elasticsearch/elastic-stack-ca.p12  -name kibana-server
 - Copier le fichier généré kibana-server.crt vers /etc/kibana/certs
 - De même pour kibana-server.key
