@@ -74,6 +74,8 @@
   - /var/lib/kibana
 - Créer un token pour kibana: elasticsearch-create-enrollement-token -s kibana
 - Run: kibana-setup
+- Ensuite run: kibana-encryption-keys generate
+- Copier les clés généré dans kibana.yml
 - Run: sudo systemctl daemon-reload
 - Run: sudo systemctl enable kibana
 - Run: sudo systemctl start kibana
@@ -141,7 +143,7 @@
         --> Vous obtenez un fichier elasticsearch-ssl-http.zip
         --> Extraire votre fichier: elle doit contenir deux dossiers: "elasticsearch" et "kibana"
         --> Dans kibana se trouve le fichier elasticsearch-ca.pem qui vas être utilisé pour la configuration vers kibana
-        --> Configuration de kibana [kibana.yml]: elasticsearch.ssl.certificateAuthorities: KBN_PATH_CONF/elasticsearch-ca.pem
+        --> Configuration de kibana [kibana.yml]: elasticsearch.ssl.certificateAuthorities: KBN_PATH_CONF/certs/elasticsearch-ca.pem
         --> Structure basique pour chaque dossier dans elasticsearch en fonction des noms de vos nodes:
                 --> node_name
                        |-- README.txt
@@ -158,7 +160,7 @@
 - Lier ces fichiers dans yml:
          --> server.ssl.enabled: true
          --> server.ssl.certificate: /etc/kibana/certs/kibana-server.crt
-         --> server.ssl.key: /etc/kibana/certs/kibana-server.key
+         --> server.ssl.key: /etccd /kibana/certs/kibana-server.key
 
 ## Activer le monitoring avec metricbeat
 - Aller dans kibana Management>STack-management
