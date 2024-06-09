@@ -115,7 +115,9 @@
     --> xpack.security.transport.ssl.keystore.path: /path/to/certs/elastic-certificates.p12
     --> xpack.security.transport.ssl.truststore.path: /path/to/certs/elastic-certificates.p12
 
-- Then run:
+- Run:  sudo chown root elastic-certificates.p12
+- Run: sudo chmod 660 elastic-certificates.p12
+    - Then run:
    -->   elasticsearch-keystore add xpack.security.transport.ssl.keystore.secure_password
    -->   elasticsearch-keystore add xpack.security.transport.ssl.truststore.secure_password
 
@@ -123,6 +125,7 @@
 
 - Ensuite: keytool -importcert -trustcacerts -noprompt -keystore elastic-stack-ca.p12 \ -storepass <password>  -alias new-ca -file ca.crt
 - Vérifier la liste de certificat avec: keytool -keystore config/elastic-stack-ca.p12 -list
+
 
 ## Génerer un certificat pour securiser la connexion entre chaque node
 - Ensuite pour un certificat pour chaque node: elasticsearch-certutil http
@@ -169,3 +172,9 @@
 - Run:  metricbeat modules list
 - En cas d'erreur: metricbeat modules enable elasticsearch-xpack
 
+## Configuration de fleet server
+- Aller dans kibana > Fleet
+- Aller dans Settings
+- Ajouter vos serveurs (Host)
+- Passer à : Add Fleet server
+- Aller dans votre terminal: elasticsearch-certutil cert --pem -ca /path/to/elastic-stack-ca.p12 -name fleet-server
