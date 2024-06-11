@@ -1,10 +1,12 @@
 # CONFIGURATION POUR UN MULTISERVEUR POUR ELK
 
 ### 1 - Présentation
-- Installation et configuration dans de multiples machines: deux au max
-- Un pour elasticsearch et l'autre pour kibana et ses plugins
+- Installation et configuration dans de multiples machines: deux au max (Mais peut s'appliquer à plus de trois node)
+- Un pour elasticsearch et l'autre pour kibana et ses plugins 
+- Les fonctions de chaque nodes dans votre cluster dépend de vos préferences
 - Installer via tar archive de linux
 - elasticsearch V 8.x: La sécurité est activée par défaut
+- Une configuration complète d'Elasticsearch avec la licence Basique
  
 ### 2 - Installation globale pour ELK (+ Filebeat)
 - Installer suivant votre configuration mais il est recommandé d'utiliser l'archive pour linux
@@ -90,7 +92,7 @@
   - elasticsearch.username: "kibana_system"
   - elasticsearch.password: "ur_passwd" 
   - elasticsearh.ssl.certificateAuthorities: ["/etc/kibana/certs/http_ca.crt"] (A copier venant de /etc/elasticsearch/certs)
-  - server.publicBaseUrl: "http://kibana_ip:5601"
+  - server.publicBaseUrl: "http://kibana_ip:5601" {Pour une utilisation standard}
 
 #### Tips: Copie vers un autre serveur ssh
  - mkdir /etc/kibana/certs
@@ -116,7 +118,7 @@
     --> xpack.security.transport.ssl.truststore.path: /path/to/certs/elastic-certificates.p12
 
 - Run:  sudo chown root elastic-certificates.p12
-- Run: sudo chmod 660 elastic-certificates.p12
+- Run: sudo chmod 660 elastic-certificates.p12 {Pour autoriser la lecture et écriture dans le fichier}
     - Then run:
    -->   elasticsearch-keystore add xpack.security.transport.ssl.keystore.secure_password
    -->   elasticsearch-keystore add xpack.security.transport.ssl.truststore.secure_password
@@ -126,6 +128,14 @@
 - Ensuite: keytool -importcert -trustcacerts -noprompt -keystore elastic-stack-ca.p12 \ -storepass <password>  -alias new-ca -file ca.crt
 - Vérifier la liste de certificat avec: keytool -keystore config/elastic-stack-ca.p12 -list
 
+
+#### Tips
+- Au cas ou elasticsearch ne peut pas lire ou écrire le contenu de votre dossier/fichier, passer en ces commandes: 
+  --> sudo chown user:group filename
+  --> sudo chown -R user:group folder 
+      |-> Ils permettent de changer l'utilisateur propriétaire et le groupe d'utilisateur de votre fichier ou dossier
+  --> sudo chmod 660 file_name
+      |-> Permet de changer la permission sur la lecture et écriture du document par l'utilisateur concerné
 
 ### 6 - Génerer un certificat pour securiser la connexion entre chaque node
 - Ensuite pour un certificat pour chaque node: elasticsearch-certutil http
@@ -156,20 +166,38 @@
                 --> Run :  elasticsearch-keystore add xpack.security.http.ssl.keystore.secure_password
 
 ### 7 - Securisation de la connexion de kibana avec le serveur
-- Run elasticsearch-certutil csr -name kibana-server [Inutile, passer à l'etape suivante]
+- Run elasticsearch-certutil csr -name kibana-server [Obsolète, passer à l'etape suivante]
 - The  run: elasticsearch-certutil cert --pem -ca /usr/share/elasticsearch/elastic-stack-ca.p12  -name kibana-server
 - Copier le fichier généré kibana-server.crt vers /etc/kibana/certs
 - De même pour kibana-server.key
 - Lier ces fichiers dans yml:
          --> server.ssl.enabled: true
          --> server.ssl.certificate: /etc/kibana/certs/kibana-server.crt
-         --> server.ssl.key: /etccd /kibana/certs/kibana-server.key
+         --> server.ssl.key: /etc/kibana/certs/kibana-server.key
+- Cela changera le protocole de votre serveur kibana en https
+
+
 
 ### 8 - Self monitoring avec Kibana (Activation)
+- Activer le monitoring pour une instance Kibana
+- {Activation du self-monitoring dans kibana}
+- Il existe deux méthodes pour cela: 
+  -> Kibana + Metricbeat (Recommandé)   
+  -> Legacy collectors
+- Ici on utilisera la legacy collectors
+- De base, on a ceci par défaut: monitoring.kibana.collection.enabled: false
+- Cela peut se faire avec la licence basique
+- Aller dans elasticsearch.yml et ajouter:
+  --> xpack.monitoring.collection.enabled: true
+      |-->  Vous pouvez le faire pour toutes vos nodes
+- Ensuite dans kibana.yml:
+  --> monitoring.kibana.collection.enabled: true
+- Vous pouvez voir dans Kibana que le self monitoring pour votre cluster est activé
+
 
 
 ### 9 - Activer le monitoring avec metricbeat
-- Aller dans kibana Management>STack-management
+- Aller dans kibana Management > Stack-management
 - Si Metricbeat non installé, veuillez l'installer (Via le lien fourni dans kibana)
 - Changer le mots de passe pour beats_system dans kibana ou elasticsearch-reset-password -i -u beats_system
 - Run:  metricbeat modules list
