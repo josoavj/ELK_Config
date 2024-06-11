@@ -1,12 +1,12 @@
 # CONFIGURATION POUR UN MULTISERVEUR POUR ELK
 
-### Présentation
+### 1 - Présentation
 - Installation et configuration dans de multiples machines: deux au max
 - Un pour elasticsearch et l'autre pour kibana et ses plugins
 - Installer via tar archive de linux
 - elasticsearch V 8.x: La sécurité est activée par défaut
  
-### Installation globale pour ELK (+ Filebeat)
+### 2 - Installation globale pour ELK (+ Filebeat)
 - Installer suivant votre configuration mais il est recommandé d'utiliser l'archive pour linux
 - if (installation == linux){
   lier_au_path(ELK_PATH);
@@ -27,7 +27,7 @@
   -> Recommandé: au cas ou il y a au moins deux terminal, veuillez configurer les deux
   -> Ensuite: source .extension_nom_terminal
 
-#### Pour le serveur elasticsearch
+#### 3 - Pour le serveur elasticsearch
 - Run: elasticsearch [Pour une configuration basique]
 - Run with systemd:
      -> sudo systemctl enable elasticsearch.service
@@ -66,7 +66,7 @@
 - Run: sudo systemctl start elasticsearch
 
 
-### Pour kibana dans un autre serveur
+### 4 - Pour kibana dans un autre serveur
 - Installer kibana
 - Vérifier l'intégrité de tous les fichiers dans les dossiers suivants:
   - /usr/share/kibana/  
@@ -92,18 +92,18 @@
   - elasticsearh.ssl.certificateAuthorities: ["/etc/kibana/certs/http_ca.crt"] (A copier venant de /etc/elasticsearch/certs)
   - server.publicBaseUrl: "http://kibana_ip:5601"
 
-#### Copie vers un autre serveur ssh
+#### Tips: Copie vers un autre serveur ssh
  - mkdir /etc/kibana/certs
  - Do: scp /etc/elasticsearch/certs/http_ca.crt sfi@ip:/etc/kibana/certs
 - Ensuite: elasticsearch-reset-password -i -u kibana_system [Definition du mot de passe kibana]
 - Then: sudo systemctl restart kibana.service
 
-## Ajout automatique d'un nouveau node elasticsearch vers un cluster existant
+#### Tips: Ajout automatique d'un nouveau node elasticsearch vers un cluster existant
 - ./elasticsearch-create-enrollment-token -s node
 - Copier le token generé
 - Executer la commande suivant dans le nouveau serveur node elasticsearch:
   -> 
-## Génerer un certificat pem pour votre cluster elasticsearch
+### 5 - Génerer un certificat pem pour votre cluster elasticsearch
 - Run ./bin/elasticsearch-certutil ca
 - Cela vous donnera le fichier:  elastic-stack-ca.p12 [Sécurisé avec un mot de passe]
 - Ensuite run: elasticsearch-certutil cert --ca elastic-stack-ca.p12 [Pour génerer un clé et un certificat privé pour votre node (Single node)]
@@ -127,7 +127,7 @@
 - Vérifier la liste de certificat avec: keytool -keystore config/elastic-stack-ca.p12 -list
 
 
-## Génerer un certificat pour securiser la connexion entre chaque node
+### 6 - Génerer un certificat pour securiser la connexion entre chaque node
 - Ensuite pour un certificat pour chaque node: elasticsearch-certutil http
 - Suivre les instructions
 - Pour génerer des nouveaux certificats pour toutes vos nodes:
@@ -155,7 +155,7 @@
                 --> Copier http.p12 dans certs/
                 --> Run :  elasticsearch-keystore add xpack.security.http.ssl.keystore.secure_password
 
-## Securisation de la connexion de kibana avec le serveur
+### 7 - Securisation de la connexion de kibana avec le serveur
 - Run elasticsearch-certutil csr -name kibana-server [Inutile, passer à l'etape suivante]
 - The  run: elasticsearch-certutil cert --pem -ca /usr/share/elasticsearch/elastic-stack-ca.p12  -name kibana-server
 - Copier le fichier généré kibana-server.crt vers /etc/kibana/certs
@@ -165,16 +165,31 @@
          --> server.ssl.certificate: /etc/kibana/certs/kibana-server.crt
          --> server.ssl.key: /etccd /kibana/certs/kibana-server.key
 
-## Activer le monitoring avec metricbeat
+### 8 - Self monitoring avec Kibana (Activation)
+
+
+### 9 - Activer le monitoring avec metricbeat
 - Aller dans kibana Management>STack-management
 - Si Metricbeat non installé, veuillez l'installer (Via le lien fourni dans kibana)
 - Changer le mots de passe pour beats_system dans kibana ou elasticsearch-reset-password -i -u beats_system
 - Run:  metricbeat modules list
 - En cas d'erreur: metricbeat modules enable elasticsearch-xpack
 
-## Configuration de fleet server
-- Aller dans kibana > Fleet
-- Aller dans Settings
-- Ajouter vos serveurs (Host)
-- Passer à : Add Fleet server
-- Aller dans votre terminal: elasticsearch-certutil cert --pem -ca /path/to/elastic-stack-ca.p12 -name fleet-server
+### 10 - Configuration de fleet server
+- Dans votre serveur Kibana: 
+  -> Aller dans Menu > Fleet
+  -> Aller dans Settings
+  -> Ajouter vos serveurs (Host)
+  -> Passer à : Add Fleet server
+  -> Ouvrir un terminal et executer: elasticsearch-certutil cert --pem -ca /path/to/elastic-stack-ca.p12 -name fleet-server
+
+### 11 - Configuration d'un agent elastic (Elastic AGENT)
+- 
+
+
+
+
+
+
+
+####
