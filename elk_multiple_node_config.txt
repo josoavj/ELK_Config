@@ -225,7 +225,15 @@
 ### 11 - Configuration d'un agent elastic (Elastic AGENT)
 - On ne peut pas installer un agent dans un firewall fortigate
 - Tous les agents doivent être connecté à l'hôte (Host)
-- 
+- Aller dans Add agent
+- Enroll with fleet enabled
+- Utiliser linux tar pour ceci
+- Copier la commande donnée
+- Dans terminal, ajouter --certificate-authorities=../path/certs/elasticsearch-ca.pem --insecure
+- If (incoming-data) {
+  Agent_successfully installed
+} 
+- Une fois ces configurations (Fleet & Agent) vous pouvez ajouter des intégrations
 
 
 
