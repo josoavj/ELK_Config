@@ -114,6 +114,9 @@
 - Ensuite systemctl daemon-reload dans le nouveau serveur elasticsearch
 - Verifier dans kibana si les changement sont pris en compte (Nombre de nodes)
 - Done xD
+- Remarque: Il est recommandé de bien enroller tous vos nodes dans un cluster avant de sécuriser ce dernier
+- Je suggère aussi d'activer par défaut le monitoring dans kibana pour mieux suivre les activités dans votre cluster
+
 
 ### 5 - Génerer un certificat pem pour votre cluster elasticsearch
 - Run ./bin/elasticsearch-certutil ca
