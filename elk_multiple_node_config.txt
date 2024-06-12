@@ -100,11 +100,21 @@
 - Ensuite: elasticsearch-reset-password -i -u kibana_system [Definition du mot de passe kibana]
 - Then: sudo systemctl restart kibana.service
 
-#### Tips: Ajout automatique d'un nouveau node elasticsearch vers un cluster existant
+### ADS: Ajout automatique d'un nouveau node elasticsearch vers un cluster existant
+- La version d'elasticsearch pour chaque node doivent être les mêmes
+- Configuration dans ../../elasticsearch.yml de votre elk:
+   -> cluster.name: same_as_master
+   -> node.name: node-x
+   -> host: your_host
+   -> port: your_port
 - ./elasticsearch-create-enrollment-token -s node
 - Copier le token generé
 - Executer la commande suivant dans le nouveau serveur node elasticsearch:
-  -> 
+   -> elasticsearch-reconfigure-node --enrollement-token votre_token
+- Ensuite systemctl daemon-reload dans le nouveau serveur elasticsearch
+- Verifier dans kibana si les changement sont pris en compte (Nombre de nodes)
+- Done xD
+
 ### 5 - Génerer un certificat pem pour votre cluster elasticsearch
 - Run ./bin/elasticsearch-certutil ca
 - Cela vous donnera le fichier:  elastic-stack-ca.p12 [Sécurisé avec un mot de passe]
