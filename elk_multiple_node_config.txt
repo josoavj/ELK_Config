@@ -197,11 +197,13 @@
 
 
 ### 9 - Activer le monitoring avec metricbeat
+- Pour tracer l'activité de votre cluster et ses nodes
 - Aller dans kibana Management > Stack-management
 - Si Metricbeat non installé, veuillez l'installer (Via le lien fourni dans kibana)
 - Changer le mots de passe pour beats_system dans kibana ou elasticsearch-reset-password -i -u beats_system
 - Run:  metricbeat modules list
 - En cas d'erreur: metricbeat modules enable elasticsearch-xpack
+- Remarque: Ajouter metricbeat dans le même serveur qu'elasticsearch
 
 ### 10 - Configuration de fleet server
 - Protocole: TCP 8220 > Agent (TCP 8820 To the Agent)
