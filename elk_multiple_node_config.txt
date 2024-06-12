@@ -204,16 +204,28 @@
 - En cas d'erreur: metricbeat modules enable elasticsearch-xpack
 
 ### 10 - Configuration de fleet server
+- Protocole: TCP 8220 > Agent (TCP 8820 To the Agent)
+- Déploiement en local pas dans le cloud (On premises)
+- On ajoute le serveur fleet et le serveur elasticsearch
+- Configuration valide pour la version 7.13 et plus
+- Prérequis:
+  -> Avoir un CA (Certificat Authority)
 - Dans votre serveur Kibana: 
   -> Aller dans Menu > Fleet
-  -> Aller dans Settings
-  -> Ajouter vos serveurs (Host)
+  -> Aller dans Settings (Fleet)
+  -> Ajouter vos serveurs elasticsearch (Host) {https://localhost:9200}
   -> Passer à : Add Fleet server
+  -> Add Fleet server > Advanced > Production > Add fleet server Host (Port 8220) > Installing from a centralized host
   -> Ouvrir un terminal et executer: elasticsearch-certutil cert --pem -ca /path/to/elastic-stack-ca.p12 -name fleet-server
-
+  -> On obtient les fichier suivant: fleet-server.crt fleet-server.key
+  -> Copier ces fichiers dans le dossier pour fleet (../fleet/certs/)
+  -> Veuiller utiliser la même CA que Kibana dans fleet (elasticsearch-ca.pem)
+  -> Install Fleet 
+- Continue enrolling agent with fleet
 ### 11 - Configuration d'un agent elastic (Elastic AGENT)
+- On ne peut pas installer un agent dans un firewall fortigate
+- Tous les agents doivent être connecté à l'hôte (Host)
 - 
-
 
 
 
