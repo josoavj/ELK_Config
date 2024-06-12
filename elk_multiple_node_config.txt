@@ -74,6 +74,7 @@
   - /usr/share/kibana/  
   - /etc/kibana/
   - /var/lib/kibana
+- Vérifier l'integrité de kibana avec: kibana-integrite-check
 - Créer un token pour kibana: elasticsearch-create-enrollement-token -s kibana
 - Run: kibana-setup
 - Ensuite run: kibana-encryption-keys generate
