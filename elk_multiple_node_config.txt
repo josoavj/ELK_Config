@@ -254,9 +254,4 @@
 } 
 - Une fois ces configurations (Fleet & Agent) vous pouvez ajouter des intégrations
 
-
-
-
-
-
 ####
