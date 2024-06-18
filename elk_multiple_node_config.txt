@@ -242,6 +242,9 @@
 - On ne peut pas installer un agent dans un firewall fortigate
 - Tous les agents doivent être connecté à l'hôte (Host)
 - Aller dans Add agent
+- Fonctionnement: 
+  --> Chaque agent possède un Policy
+  --> Chaque agent gère une integration
 - Enroll with fleet enabled
 - Utiliser linux tar pour ceci
 - Copier la commande donnée
