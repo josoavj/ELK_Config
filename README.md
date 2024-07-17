@@ -5,7 +5,7 @@
 
 ## Author
 
-* [Josoa](https://github.com/Josoa886)
+* [Josoa](https://github.com/josoavj)
 
 ### Info
 
