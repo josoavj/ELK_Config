@@ -31,7 +31,7 @@
 
 #### 3 - Pour le serveur elasticsearch
 - Run: elasticsearch [Pour une configuration basique]
-- Run with systemd:
+- Run with systemd (Recommended on Linux Based server):
      -> sudo systemctl enable elasticsearch.service
      -> sudo systemctm start elasticsearch.service
 
@@ -64,7 +64,7 @@
     -> Groupe=group
 - Run: sudo systemctl daemon-reload
 - Run: sudo systemctl status elasticsearch
-- Run:! sudo systemctl enable elasticsearch
+- Run: sudo systemctl enable elasticsearch
 - Run: sudo systemctl start elasticsearch
 
 
