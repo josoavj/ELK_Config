@@ -9,5 +9,5 @@
 
 ### Info
 
-* Version d'elasticsearch: **8.14**
-* Version de kibana: **8.14**
+* Version d'elasticsearch: **8.14.+**
+* Version de kibana: **8.14.+**
