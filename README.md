@@ -13,5 +13,5 @@
 * Version de kibana: **8.14.+**
   
 <p>
-  <img align="center" height=250 src="https://github.com/josoavj/ELK_Config/blob/master/assets/elastic-elasticsearch-logo.png" alt="Josoa Vonjiniaina"/>
+  <img align="center" height=250 src="https://github.com/josoavj/ELK_Config/blob/master/assets/elastic-elasticsearch-logo.png" alt="elasticsearch logo"/>
 </p>
