@@ -1,8 +1,9 @@
 # CONFIGURATION POUR UN MULTISERVEUR POUR ELK
 
 <p>
-  <img align="center" height=240 src="https://github.com/josoavj/ELK_Config/blob/master/assets/elastic-elasticsearch-logo.png" alt="elasticsearch"/>
-  <img align="center" height=250 src="https://github.com/josoavj/ELK_Config/blob/master/assets/elastic-kibana-logo.png" alt="Kibana"/>
+  <img align="center" height=100 src="https://github.com/josoavj/ELK_Config/blob/master/assets/elastic-logo.png" alt="elastic"/>
+  <img align="center" height=150 src="https://github.com/josoavj/ELK_Config/blob/master/assets/elastic-elasticsearch-logo.png" alt="elasticsearch"/>
+  <img align="center" height=150 src="https://github.com/josoavj/ELK_Config/blob/master/assets/elastic-kibana-logo.png" alt="Kibana"/>
 </p>
 
 
