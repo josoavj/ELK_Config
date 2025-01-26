@@ -11,3 +11,5 @@
 
 * Version d'elasticsearch: **8.14.+**
 * Version de kibana: **8.14.+**
+  
+![Logo elasticsearch](https://github.com/josoavj/ELK_Config/blob/master/assets/elastic-elasticsearch-logo.png)

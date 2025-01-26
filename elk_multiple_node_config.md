@@ -1,5 +1,9 @@
 # CONFIGURATION POUR UN MULTISERVEUR POUR ELK
 
+![Logo elasticsearch](https://github.com/josoavj/ELK_Config/blob/master/assets/elastic-elasticsearch-logo.png)
+![Logo de Kibana](https://github.com/josoavj/ELK_Config/blob/master/assets/elastic-kibana-logo.png)
+
+
 ## 1 - Présentation
 
 - Installation et configuration dans de multiples machines: deux au max (Mais peut s'appliquer à plus de trois node)
