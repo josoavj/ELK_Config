@@ -1,7 +1,10 @@
 # CONFIGURATION POUR UN MULTISERVEUR POUR ELK
 
-![Logo elasticsearch](https://github.com/josoavj/ELK_Config/blob/master/assets/elastic-elasticsearch-logo.png)
-![Logo de Kibana](https://github.com/josoavj/ELK_Config/blob/master/assets/elastic-kibana-logo.png)
+<p>
+  <img align="center" height=240 src="https://github.com/josoavj/ELK_Config/blob/master/assets/elastic-elasticsearch-logo.png" alt="elasticsearch"/>
+  <img align="center" height=250 src="https://github.com/josoavj/ELK_Config/blob/master/assets/elastic-kibana-logo.png" alt="Kibana"/>
+</p>
+
 
 
 ## 1 - Présentation
