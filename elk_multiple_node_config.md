@@ -1,4 +1,4 @@
-# CONFIGURATION POUR UN MULTISERVEUR POUR ELK
+# CONFIGURATION  MULTISERVEUR POUR elasticsearch - Kibana et Filebeat (Beats)
 
 <p>
   <img align="center" height=100 src="https://github.com/josoavj/ELK_Config/blob/master/assets/elastic-logo.png" alt="elastic"/>
@@ -10,16 +10,30 @@
 
 ## 1 - Présentation
 
-- Installation et configuration dans de multiples machines: deux au max (Mais peut s'appliquer à plus de trois node)
-- Un pour elasticsearch et l'autre pour kibana et ses plugins 
-- Les fonctions de chaque nodes dans votre cluster dépend de vos préferences
-- Installer via tar archive de linux
-- elasticsearch **V 8.x**: La sécurité est activée par défaut
-- Une configuration complète d'Elasticsearch avec la licence Basique
+- Installation et configuration dans de multiples machines: deux au max (Mais peut s'appliquer à plus de trois noeuds)
+- Structuration des serveurs: un pour elasticsearch et Kibana, et un autre pour les extensions 
+- Les fonctions de chaque noeuds dans votre cluster dépend de vos préferences, mais vous devez au moins avoir ces principaux noeuds:
+  - Un noeud Maître (Master Node)
+  - Un noeud de données (Data Node)
+  - Un noeud client servant de relais entre les deux noeuds
+- Vous pouvez utiliser un seul noeud au début, cela dépend de votre préference mais ce n'est pas vraiment recommandé.
+- Pour les systèmes d'exploitation basés sous Linux:
+  - Installer via l'archive (.tar)
+  - Ou installer directement en tant qu'application suivant les instructions données.
+- Pour elasticsearch **V 8.x**: La sécurité est activée par défaut.
+- Ce fichier comporte une configuration complète d'elasticsearch et de Kibana avec la licence Basique
+
+### Outils utilisés pour l'application de ces configurations
+
+- Deux Serveurs dediés: Ubuntu Server
+  - Le premier pour elasticsearch et Kibana
+  - Le second pour Filebeat
+- SSH pour faciliter l'accès distant aux deux serveurs
+
 
 ### Remarque: 
 
-- Dans l'ensemble du processur, vous aurez besoin de créer un compte elasticsearch si vous utilisez une distribution Linux:
+- Dans l'ensemble du processus, vous aurez besoin de créer un compte elasticsearch si vous utilisez une distribution Linux:
   - Créer un utilisateur et un groupe d'utilisateur sous le nom **elasticsearch**
   - Création: `sudo adduser elasticsearch`
   - Ajouter l'utilisateur dans le groupe sudo: `sudo usermod -aG sudo elasticsearch`
@@ -31,7 +45,9 @@
 - Bien qu'il soit recommandé d'utiliser l'archive comme moyen d'installation sous Linux, si vous utilisez un Distro basé sur Debian; je recommande d'utiliser le pachage .deb
 - Vous pouvez le consulter dans le site officiel d'**[elastic](https://www.elastic.co/guide)**
 
-## 2 - Installation globale pour ELK (+ Filebeat)
+## 2 - Installation globale pour elasticsearch - Kibana et Filebeat
+
+### Utilisation de l'archive (.tar) comme moyen d'installation
 
 - Installer suivant votre configuration 
 - if (installation == linux){
@@ -58,7 +74,7 @@
   - Recommandé: au cas ou il y a au moins deux terminal, veuillez configurer les deux
   - Ensuite: `source .extension_nom_terminal`
 
-## 3 - Pour le serveur elasticsearch
+## 3 - Installation et initialisation d'elasticsearch
 
 - Si vous voulez lancer une instance sans configurer, vous pouvez juste commencer ici
 - Mais si vous voulez configurer votre cluster et noeud elasticsearch, passez d'abord par le changement de configuration
