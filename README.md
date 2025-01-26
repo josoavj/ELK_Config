@@ -1,11 +1,11 @@
-# Configuration Elasticsearch - Kibana - Logstash - Filebeat
+# Configuration d'elasticsearch - Kibana - Filebeat
 
-* **Type:** Texte
-* **Contenu:** Configuration basique et avec la licence basique pour ELK et ses plugins
+* **Type:** Texte au format MarkDown
+* **Contenu:** Configuration basique et avec la licence basique pour elastic Stack et ses plugins
 
 ## Author
 
-* [Josoa](https://github.com/josoavj)
+* [Josoa Vonjiniaina](https://github.com/josoavj)
 
 ### Info
 
@@ -13,5 +13,5 @@
 * Version de kibana: **8.14.+**
   
 <p>
-  <img align="center" height=250 src="https://github.com/josoavj/ELK_Config/blob/master/assets/elastic-elasticsearch-logo.png" alt="elasticsearch logo"/>
+  <img align="center" height=200 src="https://github.com/josoavj/ELK_Config/blob/master/assets/elastic-elasticsearch-logo.png" alt="elasticsearch logo"/>
 </p>
